@@ -97,7 +97,7 @@ class StageSelector extends React.Component {
             e.stopPropagation(); // Prevent click from falling through to selecting stage.
         }
             // @todo should this not add a backdrop you already have?
-        const item = backdropLibraryContent[Math.floor(Math.random() * backdropLibraryContent.length)];
+        const item = backdropLibraryContent[0];
         this.addBackdropFromLibraryItem(item, false);
     }
     handleEmptyBackdrop (e) {
