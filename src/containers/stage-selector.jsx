@@ -52,6 +52,8 @@ class StageSelector extends React.Component {
             'setFileInput',
             'setRef'
         ]);
+        // Added default loading 
+        this.handleSurpriseBackdrop();
     }
     componentDidMount () {
         document.addEventListener('touchend', this.handleTouchEnd);
@@ -91,8 +93,10 @@ class StageSelector extends React.Component {
         });
     }
     handleSurpriseBackdrop (e) {
-        e.stopPropagation(); // Prevent click from falling through to selecting stage.
-        // @todo should this not add a backdrop you already have?
+        if (e) {
+            e.stopPropagation(); // Prevent click from falling through to selecting stage.
+        }
+            // @todo should this not add a backdrop you already have?
         const item = backdropLibraryContent[Math.floor(Math.random() * backdropLibraryContent.length)];
         this.addBackdropFromLibraryItem(item, false);
     }

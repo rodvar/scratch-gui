@@ -4,6 +4,106 @@ const categorySeparator = '<sep gap="36"/>';
 
 const blockSeparator = '<sep gap="36"/>'; // At default scale, about 28px
 
+
+// ${blockSeparator}
+//         <block type="motion_goto">
+//             <value name="TO">
+//                 <shadow type="motion_goto_menu">
+//                 </shadow>
+//             </value>
+//         </block>
+//         <block type="motion_gotoxy">
+//             <value name="X">
+//                 <shadow id="movex" type="math_number">
+//                     <field name="NUM">0</field>
+//                 </shadow>
+//             </value>
+//             <value name="Y">
+//                 <shadow id="movey" type="math_number">
+//                     <field name="NUM">0</field>
+//                 </shadow>
+//             </value>
+//         </block>
+//         <block type="motion_glideto" id="motion_glideto">
+//             <value name="SECS">
+//                 <shadow type="math_number">
+//                     <field name="NUM">1</field>
+//                 </shadow>
+//             </value>
+//             <value name="TO">
+//                 <shadow type="motion_glideto_menu">
+//                 </shadow>
+//             </value>
+//         </block>
+//         <block type="motion_glidesecstoxy">
+//             <value name="SECS">
+//                 <shadow type="math_number">
+//                     <field name="NUM">1</field>
+//                 </shadow>
+//             </value>
+//             <value name="X">
+//                 <shadow id="glidex" type="math_number">
+//                     <field name="NUM">0</field>
+//                 </shadow>
+//             </value>
+//             <value name="Y">
+//                 <shadow id="glidey" type="math_number">
+//                     <field name="NUM">0</field>
+//                 </shadow>
+//             </value>
+//         </block>
+//         ${blockSeparator}
+//         <block type="motion_pointindirection">
+//             <value name="DIRECTION">
+//                 <shadow type="math_angle">
+//                     <field name="NUM">90</field>
+//                 </shadow>
+//             </value>
+//         </block>
+//         <block type="motion_pointtowards">
+//             <value name="TOWARDS">
+//                 <shadow type="motion_pointtowards_menu">
+//                 </shadow>
+//             </value>
+//         </block>
+//         ${blockSeparator}
+//         <block type="motion_changexby">
+//             <value name="DX">
+//                 <shadow type="math_number">
+//                     <field name="NUM">10</field>
+//                 </shadow>
+//             </value>
+//         </block>
+//         <block type="motion_setx">
+//             <value name="X">
+//                 <shadow id="setx" type="math_number">
+//                     <field name="NUM">0</field>
+//                 </shadow>
+//             </value>
+//         </block>
+//         <block type="motion_changeyby">
+//             <value name="DY">
+//                 <shadow type="math_number">
+//                     <field name="NUM">10</field>
+//                 </shadow>
+//             </value>
+//         </block>
+//         <block type="motion_sety">
+//             <value name="Y">
+//                 <shadow id="sety" type="math_number">
+//                     <field name="NUM">0</field>
+//                 </shadow>
+//             </value>
+//         </block>
+//         ${blockSeparator}
+//         <block type="motion_ifonedgebounce"/>
+//         ${blockSeparator}
+//         <block type="motion_setrotationstyle"/>
+//         ${blockSeparator}
+//         <block id="${targetId}_xposition" type="motion_xposition"/>
+//         <block id="${targetId}_yposition" type="motion_yposition"/>
+//         <block id="${targetId}_direction" type="motion_direction"/>
+
 /* eslint-disable no-unused-vars */
 const motion = function (isInitialSetup, isStage, targetId) {
     const stageSelected = ScratchBlocks.ScratchMsgs.translate(
@@ -36,108 +136,13 @@ const motion = function (isInitialSetup, isStage, targetId) {
                 </shadow>
             </value>
         </block>
-        ${blockSeparator}
-        <block type="motion_goto">
-            <value name="TO">
-                <shadow type="motion_goto_menu">
-                </shadow>
-            </value>
-        </block>
-        <block type="motion_gotoxy">
-            <value name="X">
-                <shadow id="movex" type="math_number">
-                    <field name="NUM">0</field>
-                </shadow>
-            </value>
-            <value name="Y">
-                <shadow id="movey" type="math_number">
-                    <field name="NUM">0</field>
-                </shadow>
-            </value>
-        </block>
-        <block type="motion_glideto" id="motion_glideto">
-            <value name="SECS">
-                <shadow type="math_number">
-                    <field name="NUM">1</field>
-                </shadow>
-            </value>
-            <value name="TO">
-                <shadow type="motion_glideto_menu">
-                </shadow>
-            </value>
-        </block>
-        <block type="motion_glidesecstoxy">
-            <value name="SECS">
-                <shadow type="math_number">
-                    <field name="NUM">1</field>
-                </shadow>
-            </value>
-            <value name="X">
-                <shadow id="glidex" type="math_number">
-                    <field name="NUM">0</field>
-                </shadow>
-            </value>
-            <value name="Y">
-                <shadow id="glidey" type="math_number">
-                    <field name="NUM">0</field>
-                </shadow>
-            </value>
-        </block>
-        ${blockSeparator}
-        <block type="motion_pointindirection">
-            <value name="DIRECTION">
-                <shadow type="math_angle">
-                    <field name="NUM">90</field>
-                </shadow>
-            </value>
-        </block>
-        <block type="motion_pointtowards">
-            <value name="TOWARDS">
-                <shadow type="motion_pointtowards_menu">
-                </shadow>
-            </value>
-        </block>
-        ${blockSeparator}
-        <block type="motion_changexby">
-            <value name="DX">
-                <shadow type="math_number">
-                    <field name="NUM">10</field>
-                </shadow>
-            </value>
-        </block>
-        <block type="motion_setx">
-            <value name="X">
-                <shadow id="setx" type="math_number">
-                    <field name="NUM">0</field>
-                </shadow>
-            </value>
-        </block>
-        <block type="motion_changeyby">
-            <value name="DY">
-                <shadow type="math_number">
-                    <field name="NUM">10</field>
-                </shadow>
-            </value>
-        </block>
-        <block type="motion_sety">
-            <value name="Y">
-                <shadow id="sety" type="math_number">
-                    <field name="NUM">0</field>
-                </shadow>
-            </value>
-        </block>
-        ${blockSeparator}
-        <block type="motion_ifonedgebounce"/>
-        ${blockSeparator}
-        <block type="motion_setrotationstyle"/>
-        ${blockSeparator}
-        <block id="${targetId}_xposition" type="motion_xposition"/>
-        <block id="${targetId}_yposition" type="motion_yposition"/>
-        <block id="${targetId}_direction" type="motion_direction"/>`}
+
+        `}
         ${categorySeparator}
     </category>
     `;
 };
+
 
 const xmlEscape = function (unsafe) {
     return unsafe.replace(/[<>&'"]/g, c => {
@@ -343,11 +348,7 @@ const sound = function (isInitialSetup, isStage, targetId, soundName) {
     `;
 };
 
-const events = function (isInitialSetup, isStage) {
-    return `
-    <category name="%{BKY_CATEGORY_EVENTS}" id="events" colour="#FFD500" secondaryColour="#CC9900">
-        <block type="event_whenflagclicked"/>
-        <block type="event_whenkeypressed">
+{/* <block type="event_whenkeypressed">
         </block>
         ${isStage ? `
             <block type="event_whenstageclicked"/>
@@ -376,16 +377,17 @@ const events = function (isInitialSetup, isStage) {
             <value name="BROADCAST_INPUT">
               <shadow type="event_broadcast_menu"></shadow>
             </value>
-        </block>
+        </block> */}
+const events = function (isInitialSetup, isStage) {
+    return `
+    <category name="%{BKY_CATEGORY_EVENTS}" id="events" colour="#FFD500" secondaryColour="#CC9900">
+        <block type="event_whenflagclicked"/>
         ${categorySeparator}
     </category>
     `;
 };
 
-const control = function (isInitialSetup, isStage) {
-    return `
-    <category name="%{BKY_CATEGORY_CONTROL}" id="control" colour="#FFAB19" secondaryColour="#CF8B17">
-        <block type="control_wait">
+{/* <block type="control_wait">
             <value name="DURATION">
                 <shadow type="math_positive_number">
                     <field name="NUM">1</field>
@@ -393,13 +395,6 @@ const control = function (isInitialSetup, isStage) {
             </value>
         </block>
         ${blockSeparator}
-        <block type="control_repeat">
-            <value name="TIMES">
-                <shadow type="math_whole_number">
-                    <field name="NUM">10</field>
-                </shadow>
-            </value>
-        </block>
         <block id="forever" type="control_forever"/>
         ${blockSeparator}
         <block type="control_if"/>
@@ -423,7 +418,17 @@ const control = function (isInitialSetup, isStage) {
                 </value>
             </block>
             <block type="control_delete_this_clone"/>
-        `}
+        `} */}
+const control = function (isInitialSetup, isStage) {
+    return `
+    <category name="%{BKY_CATEGORY_CONTROL}" id="control" colour="#FFAB19" secondaryColour="#CF8B17">
+        <block type="control_repeat">
+            <value name="TIMES">
+                <shadow type="math_whole_number">
+                    <field name="NUM">10</field>
+                </shadow>
+            </value>
+        </block>
         ${categorySeparator}
     </category>
     `;
@@ -766,14 +771,17 @@ const makeToolboxXML = function (isInitialSetup, isStage = true, targetId, categ
     const everything = [
         xmlOpen,
         motionXML, gap,
-        looksXML, gap,
-        soundXML, gap,
         eventsXML, gap,
-        controlXML, gap,
-        sensingXML, gap,
-        operatorsXML, gap,
-        variablesXML, gap,
-        myBlocksXML
+        controlXML,
+        // controlXML, gap,
+        // looksXML, gap,
+        // soundXML, gap,
+        // eventsXML, gap,
+        // controlXML, gap,
+        // sensingXML, gap,
+        // operatorsXML, gap,
+        // variablesXML, gap,
+        // myBlocksXML
     ];
 
     for (const extensionCategory of categoriesXML) {
