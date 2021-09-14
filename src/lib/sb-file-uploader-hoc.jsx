@@ -5,6 +5,7 @@ import {defineMessages, intlShape, injectIntl} from 'react-intl';
 import {connect} from 'react-redux';
 import log from '../lib/log';
 import sharedMessages from './shared-messages';
+import defaultProject from '../../static/assets/project1.sb3';
 
 import {
     LoadingStates,
@@ -94,6 +95,8 @@ const SBFileUploaderHOC = function (WrappedComponent) {
                 projectChanged,
                 userOwnsProject
             } = this.props;
+            // const thisFileInput = {};
+            // thisFileInput.files = [this.loadDefaultProject()];
             const thisFileInput = e.target;
             if (thisFileInput.files) { // Don't attempt to load if no file was selected
                 this.fileToUpload = thisFileInput.files[0];
@@ -118,12 +121,18 @@ const SBFileUploaderHOC = function (WrappedComponent) {
                 this.props.closeFileMenu();
             }
         }
+
+        loadDefaultProject = () => {
+            return defaultProject;
+            
+        }
         // step 4 is below, in mapDispatchToProps
 
         // step 5: called from componentDidUpdate when project state shows
         // that project data has finished "uploading" into the browser
         handleFinishedLoadingUpload () {
             if (this.fileToUpload && this.fileReader) {
+                console.log(`File to upload ${this.fileToUpload}`);
                 // begin to read data from the file. When finished,
                 // cues step 6 using the reader's onload callback
                 this.fileReader.readAsArrayBuffer(this.fileToUpload);
@@ -149,6 +158,12 @@ const SBFileUploaderHOC = function (WrappedComponent) {
                 this.props.onLoadingStarted();
                 const filename = this.fileToUpload && this.fileToUpload.name;
                 let loadingSuccess = false;
+
+                console.log("here , here");
+                for (var i=0; i < this.fileReader.result.length; i++) {
+                    console.log(`here: ${this.fileReader.result[i]}`);
+                }
+
                 this.props.vm.loadProject(this.fileReader.result)
                     .then(() => {
                         if (filename) {

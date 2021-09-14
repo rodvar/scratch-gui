@@ -1,4 +1,5 @@
 import {BitmapAdapter} from 'scratch-svg-renderer';
+import {base64toBlob} from './file-utils';
 import randomizeSpritePosition from './randomize-sprite-position.js';
 import bmpConverter from './bmp-converter';
 import gifDecoder from './gif-decoder';
@@ -13,6 +14,26 @@ const extractFileName = function (nameExt) {
     // There could be multiple dots, but get the stuff before the first .
     const nameParts = nameExt.split('.', 1); // we only care about the first .
     return nameParts[0];
+};
+
+/**
+ * 
+ * @param {string} base64File the png file encoded as base64
+ * @param {Function} onload The function that handles loading the file
+ * @param {Function} onerror The function that handles any error loading the file
+ */
+const handleBase64AssetUploadVM = (base64File, onload, onerror) => {
+    try {
+        const contentType = "image/png";
+        const blob = base64toBlob(base64File, contentType);
+        blob.arrayBuffer().then((arrayBuffer) => {
+            console.log(`ACA buffer ready ${arrayBuffer}`);
+            onload(arrayBuffer, contentType, "default_backdrop", 0, 1);
+        });
+    } catch (e) {
+        console.log(`ACA ERROR ${e}`);
+        onerror(e);
+    }
 };
 
 /**
@@ -252,6 +273,7 @@ const spriteUpload = function (fileData, fileType, spriteName, storage, handleSp
 };
 
 export {
+    handleBase64AssetUploadVM,
     handleFileUpload,
     costumeUpload,
     soundUpload,

@@ -20,7 +20,8 @@ import {getEventXY} from '../lib/touch-utils';
 import StageSelectorComponent from '../components/stage-selector/stage-selector.jsx';
 
 import backdropLibraryContent from '../lib/libraries/backdrops.json';
-import {handleFileUpload, costumeUpload} from '../lib/file-uploader.js';
+import defaultSetup from '../lib/libraries/default-setup.json'; 
+import {handleBase64AssetUploadVM, handleFileUpload, costumeUpload} from '../lib/file-uploader.js';
 
 const dragTypes = [
     DragConstants.COSTUME,
@@ -53,7 +54,7 @@ class StageSelector extends React.Component {
             'setRef'
         ]);
         // Added default loading 
-        this.handleSurpriseBackdrop();
+        this.handleBackdropUpload({target: defaultSetup.backdrop});
     }
     componentDidMount () {
         document.addEventListener('touchend', this.handleTouchEnd);
@@ -108,11 +109,16 @@ class StageSelector extends React.Component {
     handleBackdropUpload (e) {
         const storage = this.props.vm.runtime.storage;
         this.props.onShowImporting();
-        handleFileUpload(e.target, (buffer, fileType, fileName, fileIndex, fileCount) => {
+        const target = e.target;
+
+        const uploadToVM = (buffer, fileType, fileName, fileIndex, fileCount, storage) => {
+            console.log(`ACA buffer=${buffer};fileType=${fileType};fileName=${fileName};fileIndex=${fileIndex};fileCount=${fileCount}`);
             costumeUpload(buffer, fileType, storage, vmCostumes => {
                 this.props.vm.setEditingTarget(this.props.id);
+                console.log(`ACA Editing target ${this.props.id}`);
                 vmCostumes.forEach((costume, i) => {
                     costume.name = `${fileName}${i ? i + 1 : ''}`;
+                    console.log(`ACA costume name ${costume.name}`);
                 });
                 this.handleNewBackdrop(vmCostumes).then(() => {
                     if (fileIndex === fileCount - 1) {
@@ -120,8 +126,19 @@ class StageSelector extends React.Component {
                     }
                 });
             }, this.props.onCloseImporting);
-        }, this.props.onCloseImporting);
+        }
+
+        if (typeof target === 'object') {
+            handleFileUpload(target, (buffer, fileType, fileName, fileIndex, fileCount) => {
+                uploadToVM(buffer, fileType, fileName, fileIndex, fileCount, storage);
+            }, this.props.onCloseImporting);
+        } else {
+            handleBase64AssetUploadVM(defaultSetup.backdrop, (buffer, fileType, fileName, fileIndex, fileCount) => {
+                uploadToVM(buffer, fileType, fileName, fileIndex, fileCount, storage);
+            }, this.props.onCloseImporting);
+        }
     }
+
     handleFileUploadClick (e) {
         e.stopPropagation(); // Prevent click from selecting the stage, that is handled manually in backdrop upload
         this.fileInput.click();
