@@ -16,13 +16,14 @@ import DragConstants from '../lib/drag-constants';
 import TargetPaneComponent from '../components/target-pane/target-pane.jsx';
 import {BLOCKS_DEFAULT_SCALE} from '../lib/layout-constants';
 import spriteLibraryContent from '../lib/libraries/sprites.json';
-import {handleFileUpload, spriteUpload} from '../lib/file-uploader.js';
+import {handleFileUpload, handleBase64AssetUploadVM, spriteUpload} from '../lib/file-uploader.js';
 import sharedMessages from '../lib/shared-messages';
 import {emptySprite} from '../lib/empty-assets';
 import {highlightTarget} from '../reducers/targets';
 import {fetchSprite, fetchCode} from '../lib/backpack-api';
 import randomizeSpritePosition from '../lib/randomize-sprite-position';
 import downloadBlob from '../lib/download-blob';
+import defaultSetup from '../lib/libraries/default-setup.json'; 
 
 class TargetPane extends React.Component {
     constructor (props) {
@@ -49,6 +50,8 @@ class TargetPane extends React.Component {
             'handleSpriteUpload',
             'setFileInput'
         ]);
+        // Added default loading 
+        this.handleSpriteUpload({target: defaultSetup.sprite});
     }
     componentDidMount () {
         this.props.vm.addListener('BLOCK_DRAG_END', this.handleBlockDragEnd);
@@ -140,7 +143,8 @@ class TargetPane extends React.Component {
     handleSpriteUpload (e) {
         const storage = this.props.vm.runtime.storage;
         this.props.onShowImporting();
-        handleFileUpload(e.target, (buffer, fileType, fileName, fileIndex, fileCount) => {
+        const target = e.target;
+        const uploadToVM = (buffer, fileType, fileName, storage, fileIndex, fileCount) => {
             spriteUpload(buffer, fileType, fileName, storage, newSprite => {
                 this.handleNewSprite(newSprite)
                     .then(() => {
@@ -150,8 +154,19 @@ class TargetPane extends React.Component {
                     })
                     .catch(this.props.onCloseImporting);
             }, this.props.onCloseImporting);
-        }, this.props.onCloseImporting);
+        }
+
+        // if (typeof target === 'object') {
+        //     handleFileUpload(target, (buffer, fileType, fileName, fileIndex, fileCount) => {
+        //         uploadToVM(buffer, fileType, fileName, storage, fileIndex, fileCount);
+        //     }, this.props.onCloseImporting);
+        // } else {
+            handleBase64AssetUploadVM(target, "default_sprite", (buffer, fileType, fileName, fileIndex, fileCount) => {
+                uploadToVM(buffer, fileType, fileName, storage, fileIndex, fileCount);
+            }, this.props.onCloseImporting);
+        // }
     }
+
     setFileInput (input) {
         this.fileInput = input;
     }

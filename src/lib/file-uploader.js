@@ -19,16 +19,17 @@ const extractFileName = function (nameExt) {
 /**
  * 
  * @param {string} base64File the png file encoded as base64
+ * @param {string} name for the fail
  * @param {Function} onload The function that handles loading the file
  * @param {Function} onerror The function that handles any error loading the file
  */
-const handleBase64AssetUploadVM = (base64File, onload, onerror) => {
+const handleBase64AssetUploadVM = (base64File, name, onload, onerror) => {
     try {
         const contentType = "image/png";
         const blob = base64toBlob(base64File, contentType);
         blob.arrayBuffer().then((arrayBuffer) => {
             console.log(`ACA buffer ready ${arrayBuffer}`);
-            onload(arrayBuffer, contentType, "default_backdrop", 0, 1);
+            onload(arrayBuffer, contentType, name, 0, 1);
         });
     } catch (e) {
         console.log(`ACA ERROR ${e}`);

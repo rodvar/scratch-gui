@@ -127,13 +127,13 @@ class StageSelector extends React.Component {
                 });
             }, this.props.onCloseImporting);
         }
-
+        
         if (typeof target === 'object') {
             handleFileUpload(target, (buffer, fileType, fileName, fileIndex, fileCount) => {
                 uploadToVM(buffer, fileType, fileName, fileIndex, fileCount, storage);
             }, this.props.onCloseImporting);
         } else {
-            handleBase64AssetUploadVM(defaultSetup.backdrop, (buffer, fileType, fileName, fileIndex, fileCount) => {
+            handleBase64AssetUploadVM(target, "default_backdrop", (buffer, fileType, fileName, fileIndex, fileCount) => {
                 uploadToVM(buffer, fileType, fileName, fileIndex, fileCount, storage);
             }, this.props.onCloseImporting);
         }
