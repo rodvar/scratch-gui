@@ -19,6 +19,26 @@ messages = {...messages, ...sharedMessages};
 // use the default message if a translation function is not passed
 const defaultTranslator = msgObj => msgObj.defaultMessage;
 
+
+                    // {
+                    //     assetId: 'bcf454acf82e4504149f7ffe07081dbc',
+                    //     name: translator(messages.costume, {index: 1}),
+                    //     bitmapResolution: 1,
+                    //     md5ext: 'bcf454acf82e4504149f7ffe07081dbc.svg',
+                    //     dataFormat: 'svg',
+                    //     rotationCenterX: 48,
+                    //     rotationCenterY: 50
+                    // },
+                    // {
+                    //     assetId: '0fb9be3e8397c983338cb71dc84d0b25',
+                    //     name: translator(messages.costume, {index: 2}),
+                    //     bitmapResolution: 1,
+                    //     md5ext: '0fb9be3e8397c983338cb71dc84d0b25.svg',
+                    //     dataFormat: 'svg',
+                    //     rotationCenterX: 46,
+                    //     rotationCenterY: 53
+                    // }
+
 /**
  * Generate a localized version of the default project
  * @param {function} translateFunction a function to use for translating the default names
@@ -43,9 +63,9 @@ const projectData = translateFunction => {
                 currentCostume: 0,
                 costumes: [
                     {
-                        assetId: 'cd21514d0531fdffb22204e0ec5ed84a',
+                        assetId: 'e7fa32cb05ba9ddc8d5f75bdf1694790',
                         name: translator(messages.backdrop, {index: 1}),
-                        md5ext: 'cd21514d0531fdffb22204e0ec5ed84a.svg',
+                        md5ext: 'e7fa32cb05ba9ddc8d5f75bdf1694790.svg',
                         dataFormat: 'svg',
                         rotationCenterX: 240,
                         rotationCenterY: 180
@@ -74,22 +94,13 @@ const projectData = translateFunction => {
                 currentCostume: 0,
                 costumes: [
                     {
-                        assetId: 'bcf454acf82e4504149f7ffe07081dbc',
+                        assetId: 'b09be2cb035143c870f8d4f6e2fbc32f',
                         name: translator(messages.costume, {index: 1}),
                         bitmapResolution: 1,
-                        md5ext: 'bcf454acf82e4504149f7ffe07081dbc.svg',
+                        md5ext: 'b09be2cb035143c870f8d4f6e2fbc32f.svg',
                         dataFormat: 'svg',
                         rotationCenterX: 48,
                         rotationCenterY: 50
-                    },
-                    {
-                        assetId: '0fb9be3e8397c983338cb71dc84d0b25',
-                        name: translator(messages.costume, {index: 2}),
-                        bitmapResolution: 1,
-                        md5ext: '0fb9be3e8397c983338cb71dc84d0b25.svg',
-                        dataFormat: 'svg',
-                        rotationCenterX: 46,
-                        rotationCenterY: 53
                     }
                 ],
                 sounds: [

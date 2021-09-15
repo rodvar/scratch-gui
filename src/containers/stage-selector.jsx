@@ -54,7 +54,7 @@ class StageSelector extends React.Component {
             'setRef'
         ]);
         // Added default loading 
-        this.handleBackdropUpload({target: defaultSetup.backdrop});
+        // this.handleBackdropUpload({target: defaultSetup.backdrop});
     }
     componentDidMount () {
         document.addEventListener('touchend', this.handleTouchEnd);

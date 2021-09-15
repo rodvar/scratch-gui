@@ -51,7 +51,7 @@ class TargetPane extends React.Component {
             'setFileInput'
         ]);
         // Added default loading 
-        this.handleSpriteUpload({target: defaultSetup.sprite});
+        // this.handleSpriteUpload({target: defaultSetup.sprite});
     }
     componentDidMount () {
         this.props.vm.addListener('BLOCK_DRAG_END', this.handleBlockDragEnd);
