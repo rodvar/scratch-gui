@@ -5,7 +5,7 @@ import {defineMessages, intlShape, injectIntl} from 'react-intl';
 import {connect} from 'react-redux';
 import log from '../lib/log';
 import sharedMessages from './shared-messages';
-import defaultProject from '../../static/assets/project1.sb3';
+// import defaultProject from '../../static/assets/project1.sb3';
 
 import {
     LoadingStates,
@@ -122,10 +122,9 @@ const SBFileUploaderHOC = function (WrappedComponent) {
             }
         }
 
-        loadDefaultProject = () => {
-            return defaultProject;
-            
-        }
+        // loadDefaultProject = () => {
+            // return defaultProject;
+        // }
         // step 4 is below, in mapDispatchToProps
 
         // step 5: called from componentDidUpdate when project state shows
