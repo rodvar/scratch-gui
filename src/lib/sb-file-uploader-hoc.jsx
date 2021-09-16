@@ -158,11 +158,6 @@ const SBFileUploaderHOC = function (WrappedComponent) {
                 const filename = this.fileToUpload && this.fileToUpload.name;
                 let loadingSuccess = false;
 
-                console.log("here , here");
-                for (var i=0; i < this.fileReader.result.length; i++) {
-                    console.log(`here: ${this.fileReader.result[i]}`);
-                }
-
                 this.props.vm.loadProject(this.fileReader.result)
                     .then(() => {
                         if (filename) {
