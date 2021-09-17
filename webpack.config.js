@@ -98,6 +98,9 @@ if (!process.env.CI) {
 module.exports = [
     // to run editor examples
     defaultsDeep({}, base, {
+        node: {
+            fs: 'empty'
+        },
         entry: {
             'lib.min': ['react', 'react-dom'],
             'gui': './src/playground/index.jsx',

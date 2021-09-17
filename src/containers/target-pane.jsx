@@ -144,6 +144,7 @@ class TargetPane extends React.Component {
         const storage = this.props.vm.runtime.storage;
         this.props.onShowImporting();
         const target = e.target;
+        console.log(`ACA ${fileType}, ${fileName}`);
         const uploadToVM = (buffer, fileType, fileName, storage, fileIndex, fileCount) => {
             spriteUpload(buffer, fileType, fileName, storage, newSprite => {
                 this.handleNewSprite(newSprite)

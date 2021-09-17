@@ -112,7 +112,7 @@ class StageSelector extends React.Component {
         const target = e.target;
 
         const uploadToVM = (buffer, fileType, fileName, fileIndex, fileCount, storage) => {
-            console.log(`ACA buffer=${buffer};fileType=${fileType};fileName=${fileName};fileIndex=${fileIndex};fileCount=${fileCount}`);
+            console.log(`ACA buffer=${buffer};fileType=${fileType};`);
             costumeUpload(buffer, fileType, storage, vmCostumes => {
                 this.props.vm.setEditingTarget(this.props.id);
                 console.log(`ACA Editing target ${this.props.id}`);
