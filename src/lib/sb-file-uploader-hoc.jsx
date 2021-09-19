@@ -160,150 +160,143 @@ const SBFileUploaderHOC = function (WrappedComponent) {
                 let loadingSuccess = false;
 
 
-                // loadPreCachedProject((projectResult) => {
-                //     console.log(`Project result ${projectResult}`);
-                //     // const result = sb3.serialize(vm.runtime);
-                //     loadingSuccess = true;
-                //     console.log(result);
-                // }, (error) => {
-                //     console.log(`ERROR" ${error}`);
-                // }).then(() => {
-                //     this.props.onLoadingFinished(this.props.loadingState, loadingSuccess);
-                //     // go back to step 7: whether project loading succeeded
-                //     // or failed, reset file objects
-                //     this.removeFileObjects(); 
-                // });
-                // this.props.vm.loadProjectPath(exampleProjectPath)
-                var jsonArrayMapToUint8 = (json) => {
-                    const keysQty = Object.keys(json).length;
-                    const ret = new Uint8Array(keysQty);
-                    for (var i = 0; i < keysQty; i++) {
-                        ret[i] = parseInt(json["" + i]);
-                    }
-                    return ret;
-                };
-
-                console.log(`project - fetching maze.sb3`);
-                fetch("../../static/assets/Maze.sb3").then((fileRef) => {
-                    console.log(`project - file ref ${fileRef}`);
-                    const AdmZip = require("adm-zip");
-
-                    console.log(`project - loaded adm zip..`);
-                    const extractProjectJsonAndUploadAssets = (path) => {
-                        const assetsDescriptions = [];
-                        const zip = new AdmZip(path);
-                        const projectEntry = zip.getEntries().filter(item => item.entryName.match(/project\.json/))[0];
-                        if (projectEntry) {
-                            assetsDescriptions.push({
-                                id: 0,
-                                assetType: 'Project',
-                                dataFormat: 'JSON',
-                                data: JSON.parse(zip.readAsText(projectEntry.entryName, 'utf8'))
-                            });
-                            // upload assets first
-                            zip.getEntries().forEach((entry) => {
-                                console.log(`project - unzipping ${entry.entryName}`);
-                                if (entry.entryName.endsWith("png")) {
-                                    const buffer = zip.readFile(entry);
-                                    console.log(`project - entry: ${JSON.stringify(entry)}`);
-                                    // if (entry.entryName.startsWith("1")) {
-                                    //     fileUploader.upl(buffer, 
-                                    //         "image/png",
-                                    //         this.props.vm.runtime.storage,
-                                    //         (newCustom) => {
-                                    //             console.log(`project - costumes: ${newCustom}`);
-                                    //         },
-                                    //         (error) => {
-                                    //             console.log(`project - costume error: ${error}`);
-                                    //         }
-                                    //     );
-                                    if (entry.entryName.startsWith("f")) {
-                                        fileUploader.spriteUpload(buffer, 
-                                            "image/png",
-                                            this.props.vm.runtime.storage,
-                                            (spriteJSONString) => {
-                                                console.log(`project - costumes: ${spriteJSONString}`);
-                                                this.props.vm.addSprite(spriteJSONString)
-                                            },
-                                            (error) => {
-                                                console.log(`project - costume error: ${error}`);
-                                            }
-                                        );
-                                    } else {
-                                        fileUploader.costumeUpload(buffer, 
-                                            "image/png",
-                                            this.props.vm.runtime.storage,
-                                            (newCustom) => {
-                                                console.log(`project - costumes: ${newCustom}`);
-                                                this.props.vm.addBackdrop(newCustom.md5, newCustom)
-                                            },
-                                            (error) => {
-                                                console.log(`project - costume error: ${error}`);
-                                            }
-                                        );
-                                    }
-                                } else if (entry.entryName.endsWith("wav")) {
-                                    const buffer = zip.readFile(entry);
-                                    fileUploader.soundUpload(buffer, 
-                                        "audio/wav", 
-                                        this.props.vm.runtime.storage,
-                                        (newSound) => {
-                                            console.log(`project - newsound: ${JSON.stringify(newSound)}`);
-                                            assetsDescriptions.push({
-                                                id: `${entry.entryName.split(".")[0]}`,
-                                                assetType: 'Sound',
-                                                dataFormat: 'WAV',
-                                                data: newSound.asset.data//jsonArrayMapToUint8(newSound.asset.data)
-                                            });
-                                            // this.props.vm.addSound(newSound).then((sound) => {
-                                            //     console.log(`project - newsoundadded: ${newSound}`);
-                                            // });
-                                        },
-                                        (error) => {
-                                            console.log(`project - costume error: ${error}`);
-                                        }
-                                    )
-                                }
-                            })
-                            return assetsDescriptions;
-                        }
-                        return null;
-                    }
-                    console.log(`project - reading file ref..`);
-                    // const reader = fileRef.body.getReader();
-                    fileRef.arrayBuffer().then((arrayBuffer) => {
-                        console.log(`project - loaded array buffer`);
-                        const buffer = Buffer.from(arrayBuffer);
-
-                        // const buffer = new Buffer(file.body);
-                        const project = extractProjectJsonAndUploadAssets(buffer);
-                        console.log(`project - ${JSON.stringify(project)}`);
-                        this.props.vm.loadProject(project)
-                            .then(() => {
-                                if (filename) {
-                                    const uploadedProjectTitle = this.getProjectTitleFromFilename(filename);
-                                    this.props.onSetProjectTitle(uploadedProjectTitle);
-                                }
-                                loadingSuccess = true;
-                            })
-                            .catch(error => {
-                                log.warn(error);
-                                console.log(this.props.intl.formatMessage(messages.loadError)); // eslint-disable-line no-alert
-                            })
-                            .then(() => {
-                                this.props.onLoadingFinished(this.props.loadingState, loadingSuccess);
-                                // go back to step 7: whether project loading succeeded
-                                // or failed, reset file objects
-                                this.removeFileObjects();
-                            });
-                    }).catch((error) => {
-                        console.log(`ERROR project - array buffer: ${error}`);
-                    });
+                loadPreCachedProject((projectResult) => {
+                    console.log(`Project result ${projectResult}`);
+                    // const result = sb3.serialize(vm.runtime);
+                    loadingSuccess = true;
+                    console.log(result);
                 }, (error) => {
-                    console.log(`ERROR failed project - fetch: ${error}`);
-                }).catch((error) => {
-                    console.log(`ERROR project - fetch: ${error}`);
+                    console.log(`ERROR" ${error}`);
+                }).then(() => {
+                    this.props.onLoadingFinished(this.props.loadingState, loadingSuccess);
+                    // go back to step 7: whether project loading succeeded
+                    // or failed, reset file objects
+                    this.removeFileObjects(); 
                 });
+                // var jsonArrayMapToUint8 = (json) => {
+                //     const keysQty = Object.keys(json).length;
+                //     const ret = new Uint8Array(keysQty);
+                //     for (var i = 0; i < keysQty; i++) {
+                //         ret[i] = parseInt(json["" + i]);
+                //     }
+                //     return ret;
+                // };
+
+                // console.log(`project - fetching maze.sb3`);
+                // fetch("../../static/assets/Maze.sb3").then((fileRef) => {
+                //     console.log(`project - file ref ${fileRef}`);
+                //     const AdmZip = require("adm-zip");
+
+                //     console.log(`project - loaded adm zip..`);
+                //     const extractProjectJsonAndUploadAssets = (path) => {
+                //         const assetsDescriptions = [];
+                //         const zip = new AdmZip(path);
+                //         const projectEntry = zip.getEntries().filter(item => item.entryName.match(/project\.json/))[0];
+                //         if (projectEntry) {
+                //             assetsDescriptions.push({
+                //                 id: 0,
+                //                 assetType: 'Project',
+                //                 dataFormat: 'JSON',
+                //                 data: JSON.parse(zip.readAsText(projectEntry.entryName, 'utf8'))
+                //             });
+                //             // upload assets first
+                //             zip.getEntries().forEach((entry) => {
+                //                 console.log(`project - unzipping ${entry.entryName}`);
+                //                 if (entry.entryName.endsWith("png")) {
+                //                     const buffer = zip.readFile(entry);
+                //                     console.log(`project - entry: ${JSON.stringify(entry)}`);
+                //                     if (entry.entryName.startsWith("f")) {
+                //                         fileUploader.spriteUpload(buffer, 
+                //                             "image/png",
+                //                             this.props.vm.runtime.storage,
+                //                             (spriteJSONString) => {
+                //                                 console.log(`project - sprite: ${spriteJSONString}`);
+                //                                 this.props.vm.addSprite(spriteJSONString)
+                //                             },
+                //                             (error) => {
+                //                                 console.log(`project - sprite error: ${error}`);
+                //                             }
+                //                         );
+                //                     } else {
+                //                         fileUploader.costumeUpload(buffer, 
+                //                             "image/png",
+                //                             this.props.vm.runtime.storage,
+                //                             (newCustom) => {
+                //                                 console.log(`project - costumes: ${newCustom}`);
+                //                                 this.props.vm.addBackdrop(newCustom.md5, newCustom)
+                //                             },
+                //                             (error) => {
+                //                                 console.log(`project - costume error: ${error}`);
+                //                             }
+                //                         );
+                //                     }
+                //                 } else if (entry.entryName.endsWith("wav")) {
+                //                 // if (entry.entryName.endsWith("wav")) {
+                //                     const buffer = zip.readFile(entry);
+                //                     fileUploader.soundUpload(buffer, 
+                //                         "audio/wav", 
+                //                         this.props.vm.runtime.storage,
+                //                         (newSound) => {
+                //                             console.log(`project - newsound: ${JSON.stringify(newSound)}`);
+                //                             assetsDescriptions.push({
+                //                                 id: `${entry.entryName.split(".")[0]}`,
+                //                                 assetType: 'Sound',
+                //                                 dataFormat: 'WAV',
+                //                                 data: newSound.asset.data//jsonArrayMapToUint8(newSound.asset.data)
+                //                             });
+                //                             // this.props.vm.addSound(newSound).then((sound) => {
+                //                             //     console.log(`project - newsoundadded: ${newSound}`);
+                //                             // });
+                //                         },
+                //                         (error) => {
+                //                             console.log(`project - costume error: ${error}`);
+                //                         }
+                //                     )
+                //                 }
+                //             })
+                //             return assetsDescriptions;
+                //         }
+                //         return null;
+                //     }
+                //     console.log(`project - reading file ref..`);
+                //     // const reader = fileRef.body.getReader();
+                //     fileRef.arrayBuffer().then((arrayBuffer) => {
+                //         console.log(`project - loaded array buffer`);
+                //         const buffer = Buffer.from(arrayBuffer);
+
+                //         // const buffer = new Buffer(file.body);
+                //         try {
+                //             const project = extractProjectJsonAndUploadAssets(buffer);
+                //             console.log(`project - ${JSON.stringify(project)}`);
+                //             this.props.vm.loadProject(project)
+                //                 .then(() => {
+                //                     if (filename) {
+                //                         const uploadedProjectTitle = this.getProjectTitleFromFilename(filename);
+                //                         this.props.onSetProjectTitle(uploadedProjectTitle);
+                //                     }
+                //                     loadingSuccess = true;
+                //                 })
+                //                 .catch(error => {
+                //                     log.warn(error);
+                //                     console.log(this.props.intl.formatMessage(messages.loadError)); // eslint-disable-line no-alert
+                //                 })
+                //                 .then(() => {
+                //                     this.props.onLoadingFinished(this.props.loadingState, loadingSuccess);
+                //                     // go back to step 7: whether project loading succeeded
+                //                     // or failed, reset file objects
+                //                     this.removeFileObjects();
+                //                 });
+                //             } catch (error) {
+                //                 console.log(`project - error extracting project assets: ${error}`);
+                //             }
+                //     }).catch((error) => {
+                //         console.log(`ERROR project - array buffer: ${error}`);
+                //     });
+                // }, (error) => {
+                //     console.log(`ERROR failed project - fetch: ${error}`);
+                // }).catch((error) => {
+                //     console.log(`ERROR project - fetch: ${error}`);
+                // });
                 
                 // this.props.vm.loadProject(this.fileReader.result)
                 //     .then(() => {
