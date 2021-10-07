@@ -17,6 +17,22 @@ const STAGE_SIZE_MODES = keyMirror({
 });
 
 /**
+ * Names for each state of the stage size toggle
+ * @enum {string}
+ */
+ const STAGE_VISIBILITY_MODES = keyMirror({
+    /**
+     * The "visibility stage" button is pressed; the user would like the stage visible.
+     */
+    visible: null,
+
+    /**
+     * The "visibility stage" button is not pressed; the user would like the stage hidden.
+     */
+    hidden: null
+});
+
+/**
  * Names for each stage render size
  * @enum {string}
  */
@@ -56,5 +72,6 @@ export {
     BLOCKS_DEFAULT_SCALE,
     STAGE_DISPLAY_SCALES,
     STAGE_DISPLAY_SIZES,
+    STAGE_VISIBILITY_MODES,
     STAGE_SIZE_MODES
 };

@@ -12,6 +12,10 @@ import Loader from '../loader/loader.jsx';
 import styles from './stage-wrapper.css';
 import Draggable from 'react-draggable';
 
+const stageId = "stage-wrapper";
+const VISIBLE = "visible";
+const HIDDEN = "hidden";
+
 const StageWrapperComponent = function (props) {
     const {
         isFullScreen,
@@ -22,6 +26,18 @@ const StageWrapperComponent = function (props) {
         vm
     } = props;
 
+    const swapStageVisibility = () => {
+        const currentVisibility = document.getElementById(stageId).style.visibility;
+        let visible = false;
+        if (currentVisibility === "" || currentVisibility === VISIBLE) {
+            document.getElementById(stageId).style.visibility = HIDDEN;
+        } else {
+            document.getElementById(stageId).style.visibility = VISIBLE;
+            visible = true;
+        }
+        return visible;
+    };
+ 
     const content = <Box
         className={classNames(
             styles.stageWrapper,
@@ -38,11 +54,12 @@ const StageWrapperComponent = function (props) {
         <Box className={styles.stageMenuWrapper}>
             <StageHeader
                 id="stage_header"
+                handleSwapStageVisibility={swapStageVisibility}
                 stageSize={stageSize}
                 vm={vm}
             />
         </Box>
-        <Box className={styles.stageCanvasWrapper}>
+        <Box id={stageId} className={styles.stageCanvasWrapper}>
             {
                 isRendererSupported ?
                     <Stage
