@@ -9,13 +9,13 @@ import Box from '../box/box.jsx';
 import Button from '../button/button.jsx';
 import Controls from '../../containers/controls.jsx';
 import {getStageDimensions} from '../../lib/screen-utils';
-import {STAGE_SIZE_MODES} from '../../lib/layout-constants';
+import {STAGE_SIZE_MODES, STAGE_VISIBILITY_MODES} from '../../lib/layout-constants';
 
 import fullScreenIcon from './icon--fullscreen.svg';
 import largeStageIcon from './icon--large-stage.svg';
 import smallStageIcon from './icon--small-stage.svg';
+import showStageIcon from './icon--show-stage.svg';
 import unFullScreenIcon from './icon--unfullscreen.svg';
-
 import scratchLogo from '../menu-bar/scratch-logo.svg';
 import styles from './stage-header.css';
 
@@ -29,6 +29,11 @@ const messages = defineMessages({
         defaultMessage: 'Switch to small stage',
         description: 'Button to change stage size to small',
         id: 'gui.stageHeader.stageSizeSmall'
+    },
+    swapVisibilityStageMessage: {
+        defaultMessage: 'Show/Hide stage',
+        description: 'Button to change stage visibility',
+        id: 'gui.stageHeader.stageVisibility'
     },
     fullStageSizeMessage: {
         defaultMessage: 'Enter full screen mode',
@@ -54,10 +59,14 @@ const StageHeaderComponent = function (props) {
         onKeyPress,
         onSetStageLarge,
         onSetStageSmall,
+        onSetStageVisible,
+        onSetStageInvisible,
+        handleSwapStageVisibility,
         onSetStageFull,
         onSetStageUnFull,
         showBranding,
         stageSizeMode,
+        stageVisibilityMode,
         vm
     } = props;
 
@@ -115,6 +124,28 @@ const StageHeaderComponent = function (props) {
                             className={classNames(
                                 styles.stageButton,
                                 styles.stageButtonFirst,
+                                (stageVisibilityMode === STAGE_VISIBILITY_MODES.visible) ? null : styles.stageButtonToggledOff
+                            )}
+                            onClick={(e) => {
+                                if (handleSwapStageVisibility()) {
+                                    onSetStageVisible();
+                                } else {
+                                    onSetStageInvisible();
+                                }
+                            }}
+                        >
+                            <img
+                                alt={props.intl.formatMessage(messages.swapVisibilityStageMessage)}
+                                className={styles.stageButtonIcon}
+                                draggable={false}
+                                src={showStageIcon}
+                            />
+                        </Button>
+                    </div>
+                    <div>
+                        <Button
+                            className={classNames(
+                                styles.stageButton,
                                 (stageSizeMode === STAGE_SIZE_MODES.small) ? null : styles.stageButtonToggledOff
                             )}
                             onClick={onSetStageSmall}
@@ -177,7 +208,8 @@ const StageHeaderComponent = function (props) {
 
 const mapStateToProps = state => ({
     // This is the button's mode, as opposed to the actual current state
-    stageSizeMode: state.scratchGui.stageSize.stageSize
+    stageSizeMode: state.scratchGui.stageSize.stageSize,
+    stageVisibilityMode: state.scratchGui.stageVisibility
 });
 
 StageHeaderComponent.propTypes = {
@@ -188,14 +220,18 @@ StageHeaderComponent.propTypes = {
     onSetStageFull: PropTypes.func.isRequired,
     onSetStageLarge: PropTypes.func.isRequired,
     onSetStageSmall: PropTypes.func.isRequired,
+    onSetStageVisible: PropTypes.func.isRequired,
+    onSetStageInvisible: PropTypes.func.isRequired,
     onSetStageUnFull: PropTypes.func.isRequired,
     showBranding: PropTypes.bool.isRequired,
     stageSizeMode: PropTypes.oneOf(Object.keys(STAGE_SIZE_MODES)),
+    stageVisibilityMode: PropTypes.oneOf(Object.keys(STAGE_VISIBILITY_MODES)),
     vm: PropTypes.instanceOf(VM).isRequired
 };
 
 StageHeaderComponent.defaultProps = {
-    stageSizeMode: STAGE_SIZE_MODES.large
+    stageSizeMode: STAGE_SIZE_MODES.large,
+    stageVisibilityMode: STAGE_VISIBILITY_MODES.visible
 };
 
 export default injectIntl(connect(
