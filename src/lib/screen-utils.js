@@ -1,5 +1,7 @@
 import layout, {STAGE_DISPLAY_SCALES, STAGE_SIZE_MODES, STAGE_DISPLAY_SIZES} from '../lib/layout-constants';
 
+const FACTOR = 1.25;
+
 /**
  * @typedef {object} StageDimensions
  * @property {int} height - the height to be used for the stage in the current situation.
@@ -13,10 +15,10 @@ const STAGE_DIMENSION_DEFAULTS = {
     // referencing css/units.css,
     // spacingBorderAdjustment = 2 * $full-screen-top-bottom-margin +
     //   2 * $full-screen-border-width
-    fullScreenSpacingBorderAdjustment: 12,
+    fullScreenSpacingBorderAdjustment: FACTOR * 12,
     // referencing css/units.css,
     // menuHeightAdjustment = $stage-menu-height
-    menuHeightAdjustment: 44
+    menuHeightAdjustment: FACTOR * 44
 };
 
 /**
