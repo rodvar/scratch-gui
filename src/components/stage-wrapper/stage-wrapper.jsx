@@ -47,7 +47,7 @@ const StageWrapperComponent = function (props) {
             position: 'absolute',
             bottom: "10%",
             right: "0%",
-            zIndex: 1000,
+            zIndex: 250,
         }}
         dir={isRtl ? 'rtl' : 'ltr'}
     >
