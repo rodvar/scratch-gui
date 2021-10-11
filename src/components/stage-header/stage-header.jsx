@@ -15,6 +15,8 @@ import fullScreenIcon from './icon--fullscreen.svg';
 import largeStageIcon from './icon--large-stage.svg';
 import smallStageIcon from './icon--small-stage.svg';
 import showStageIcon from './icon--show-stage.svg';
+import dragabbleOnIcon from './icon--draggable-on.svg';
+import dragabbleOffIcon from './icon--draggable-off.svg';
 import unFullScreenIcon from './icon--unfullscreen.svg';
 import scratchLogo from '../menu-bar/scratch-logo.svg';
 import styles from './stage-header.css';
@@ -53,6 +55,7 @@ const messages = defineMessages({
 });
 
 const StageHeaderComponent = function (props) {
+    
     const {
         isFullScreen,
         isPlayerOnly,
@@ -66,6 +69,10 @@ const StageHeaderComponent = function (props) {
         onSetStageUnFull,
         showBranding,
         stageSizeMode,
+        visible,
+        setVisible,
+        draggable,
+        setDraggable,
         stageVisibilityMode,
         vm
     } = props;
@@ -119,18 +126,39 @@ const StageHeaderComponent = function (props) {
                 []
             ) : (
                 <div className={styles.stageSizeToggleGroup}>
+                    {/* DRAGGABLE ON/OFF */}
                     <div>
                         <Button
                             className={classNames(
                                 styles.stageButton,
-                                styles.stageButtonFirst,
-                                (stageVisibilityMode === STAGE_VISIBILITY_MODES.visible) ? null : styles.stageButtonToggledOff
+                                styles.stageButtonFirst
+                            )}
+                            onClick={(e) => {
+                                setDraggable(!draggable);
+                            }}
+                        >
+                            <img
+                                alt={props.intl.formatMessage(messages.swapVisibilityStageMessage)}
+                                className={styles.stageButtonIcon}
+                                draggable={false}
+                                src={draggable ? dragabbleOnIcon : dragabbleOffIcon}
+                            />
+                        </Button>
+                    </div>
+                    {/* VISIBILITY ON/OFF */}
+                    <div>
+                        <Button
+                            className={classNames(
+                                styles.stageButton,
+                                (visible) ? null : styles.stageButtonToggledOff
                             )}
                             onClick={(e) => {
                                 if (handleSwapStageVisibility()) {
                                     onSetStageVisible();
+                                    setVisible(true);
                                 } else {
                                     onSetStageInvisible();
+                                    setVisible(false);
                                 }
                             }}
                         >

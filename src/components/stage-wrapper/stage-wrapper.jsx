@@ -78,6 +78,7 @@ const StageWrapperComponent = function (props) {
         <Draggable
             initialPos={{x: 100, y: 200}}
             className="my-draggable"
+            disabled={true}
             style={{
                 border: '2px solid #aa5',
                 padding: '10px'

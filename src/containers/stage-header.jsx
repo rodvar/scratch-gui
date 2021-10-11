@@ -15,6 +15,10 @@ import StageHeaderComponent from '../components/stage-header/stage-header.jsx';
 class StageHeader extends React.Component {
     constructor (props) {
         super(props);
+        this.state = {
+            visible: true,
+            draggable: true
+        };
         bindAll(this, [
             'handleKeyPress'
         ]);
@@ -30,6 +34,16 @@ class StageHeader extends React.Component {
             this.props.onSetStageUnFull(false);
         }
     }
+    setDraggable(isDraggable) {
+        this.setState({
+            draggable: isDraggable
+        });
+    }
+    setVisible(isVisible) {
+        const currentState = this.state;
+        currentState.visible = isVisible;
+        this.setState(currentState, () => {alert(this.state.visible)});
+    }
     render () {
         const {
             ...props
@@ -38,6 +52,10 @@ class StageHeader extends React.Component {
             <StageHeaderComponent
                 {...props}
                 onKeyPress={this.handleKeyPress}
+                visible={this.state.visible}
+                setVisible={this.setVisible}
+                draggable={this.state.draggable}
+                setDraggable={this.setDraggable}
             />
         );
     }
