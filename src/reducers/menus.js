@@ -6,6 +6,7 @@ const MENU_ACCOUNT = 'accountMenu';
 const MENU_FILE = 'fileMenu';
 const MENU_EDIT = 'editMenu';
 const MENU_SPRITES = 'editSprites';
+const MENU_BACKDROPS = 'editBackdrops';
 const MENU_LANGUAGE = 'languageMenu';
 const MENU_LOGIN = 'loginMenu';
 
@@ -16,6 +17,7 @@ const initialState = {
     [MENU_FILE]: false,
     [MENU_EDIT]: false,
     [MENU_SPRITES]: false,
+    [MENU_BACKDROPS]: false,
     [MENU_LANGUAGE]: false,
     [MENU_LOGIN]: false
 };
@@ -54,10 +56,13 @@ const closeFileMenu = () => closeMenu(MENU_FILE);
 const fileMenuOpen = state => state.scratchGui.menus[MENU_FILE];
 const openEditMenu = () => openMenu(MENU_EDIT);
 const openSpritesMenu = () => openMenu(MENU_SPRITES);
+const openBackdropsMenu = () => openMenu(MENU_BACKDROPS);
 const closeEditMenu = () => closeMenu(MENU_EDIT);
 const closeSpritesMenu = () => closeMenu(MENU_SPRITES);
+const closeBackdropsMenu = () => closeMenu(MENU_BACKDROPS);
 const editMenuOpen = state => state.scratchGui.menus[MENU_EDIT];
 const spritesMenuOpen = state => state.scratchGui.menus[MENU_SPRITES];
+const backdropsMenuOpen = state => state.scratchGui.menus[MENU_BACKDROPS];
 const openLanguageMenu = () => openMenu(MENU_LANGUAGE);
 const closeLanguageMenu = () => closeMenu(MENU_LANGUAGE);
 const languageMenuOpen = state => state.scratchGui.menus[MENU_LANGUAGE];
@@ -79,10 +84,13 @@ export {
     fileMenuOpen,
     openEditMenu,
     openSpritesMenu,
+    openBackdropsMenu,
     closeEditMenu,
     closeSpritesMenu,
+    closeBackdropsMenu,
     editMenuOpen,
     spritesMenuOpen,
+    backdropsMenuOpen,
     openLanguageMenu,
     closeLanguageMenu,
     languageMenuOpen,

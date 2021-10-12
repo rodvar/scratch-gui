@@ -52,10 +52,13 @@ import {
     fileMenuOpen,
     openEditMenu,
     openSpritesMenu,
+    openBackdropsMenu,
     closeEditMenu,
     closeSpritesMenu,
+    closeBackdropsMenu,
     editMenuOpen,
     spritesMenuOpen,
+    backdropsMenuOpen,
     openLanguageMenu,
     closeLanguageMenu,
     languageMenuOpen,
@@ -165,7 +168,10 @@ class MenuBar extends React.Component {
         super(props);
         bindAll(this, [
             'handleClickNew',
-            'handleClickChoose',
+            'handleClickChooseSprite',
+            'handleClickChooseBackdrop',
+            'handleClickGoToSpriteEditor',
+            'handleClickGoToBackdropEditor',
             'handleClickRemix',
             'handleClickSave',
             'handleClickSaveAsCopy',
@@ -199,10 +205,16 @@ class MenuBar extends React.Component {
         }
         this.props.onRequestCloseFile();
     }
-    handleClickChoose () {
+    handleClickChooseSprite () {
+        alert("TODO");
+    }
+    handleClickChooseBackdrop () {
         alert("TODO");
     }
     handleClickGoToSpriteEditor() {
+        alert("TODO");
+    }
+    handleClickGoToBackdropEditor() {
         alert("TODO");
     }
     handleClickRemix () {
@@ -380,6 +392,13 @@ class MenuBar extends React.Component {
                 defaultMessage="Choose"
                 description="Menu bar item for choosing a provided sprite"
                 id="gui.menuBar.chooseSprite"
+            />
+        );
+        const chooseBackdropMessage = (
+            <FormattedMessage
+                defaultMessage="Choose"
+                description="Menu bar item for choosing a provided backdrop"
+                id="gui.menuBar.chooseBackdrop"
             />
         );
         const remixButton = (
@@ -568,7 +587,7 @@ class MenuBar extends React.Component {
                                 <MenuSection>
                                     <MenuItem
                                         isRtl={this.props.isRtl}
-                                        onClick={this.handleClickChoose}
+                                        onClick={this.handleClickChooseSprite}
                                     >
                                         {chooseSpriteMessage}
                                     </MenuItem>
@@ -586,6 +605,50 @@ class MenuBar extends React.Component {
                                             defaultMessage="Editor"
                                             description="Menu bar item for editing a sprite" // eslint-disable-line max-len
                                             id="gui.menuBar.spriteEditor"
+                                        />
+                                    </MenuItem>
+                                </MenuSection>
+                            </MenuBarMenu>
+                        </div>
+                        <div
+                            className={classNames(styles.menuBarItem, styles.hoverable, {
+                                [styles.active]: this.props.backdropsMenuOpen
+                            })}
+                            onMouseUp={this.props.onClickBackdrops}>
+                            <div className={classNames(styles.backdropsMenu)}>
+                                <FormattedMessage
+                                    defaultMessage="Backdrops"
+                                    description="Text for backdrops dropdown menu"
+                                    id="gui.menuBar.backdrops"
+                                />
+                            </div>
+                            <MenuBarMenu
+                                    className={classNames(styles.menuBarMenu)}
+                                    open={this.props.backdropsMenuOpen}
+                                    place={this.props.isRtl ? 'left' : 'right'}
+                                    onRequestClose={this.props.onRequestCloseBackdrops}
+                                >
+                                <MenuSection>
+                                    <MenuItem
+                                        isRtl={this.props.isRtl}
+                                        onClick={this.handleClickChooseBackdrop}
+                                    >
+                                        {chooseBackdropMessage}
+                                    </MenuItem>
+                                </MenuSection>
+                                <MenuSection>
+                                    <MenuItem
+                                        onClick={this.props.onStartSelectingFileUpload}
+                                    >
+                                        {this.props.intl.formatMessage(sharedMessages.loadFromComputerTitle)}
+                                    </MenuItem>
+                                    <MenuItem
+                                        onClick={this.handleClickGoToBackdropEditor}
+                                    >
+                                        <FormattedMessage
+                                            defaultMessage="Editor"
+                                            description="Menu bar item for editing a backdrop" // eslint-disable-line max-len
+                                            id="gui.menuBar.backdropEditor"
                                         />
                                     </MenuItem>
                                 </MenuSection>
@@ -904,6 +967,7 @@ const mapStateToProps = (state, ownProps) => {
         fileMenuOpen: fileMenuOpen(state),
         editMenuOpen: editMenuOpen(state),
         spritesMenuOpen: spritesMenuOpen(state),
+        backdropsMenuOpen: backdropsMenuOpen(state),
         isRtl: state.locales.isRtl,
         isUpdating: getIsUpdating(loadingState),
         isShowingProject: getIsShowingProject(loadingState),
@@ -928,8 +992,10 @@ const mapDispatchToProps = dispatch => ({
     onRequestCloseFile: () => dispatch(closeFileMenu()),
     onClickEdit: () => dispatch(openEditMenu()),
     onClickSprites: () => dispatch(openSpritesMenu()),
+    onClickBackdrops: () => dispatch(openBackdropsMenu()),
     onRequestCloseEdit: () => dispatch(closeEditMenu()),
     onRequestCloseSprites: () => dispatch(closeSpritesMenu()),
+    onRequestCloseBackdrops: () => dispatch(closeBackdropsMenu()),
     onClickLanguage: () => dispatch(openLanguageMenu()),
     onRequestCloseLanguage: () => dispatch(closeLanguageMenu()),
     onClickLogin: () => dispatch(openLoginMenu()),
