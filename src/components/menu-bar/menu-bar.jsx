@@ -51,8 +51,11 @@ import {
     closeFileMenu,
     fileMenuOpen,
     openEditMenu,
+    openSpritesMenu,
     closeEditMenu,
+    closeSpritesMenu,
     editMenuOpen,
+    spritesMenuOpen,
     openLanguageMenu,
     closeLanguageMenu,
     languageMenuOpen,
@@ -232,6 +235,7 @@ class MenuBar extends React.Component {
         return () => {
             restoreFun();
             this.props.onRequestCloseEdit();
+            // this.props.onRequestCloseSprites();
         };
     }
     handleKeyPress (event) {
@@ -529,6 +533,72 @@ class MenuBar extends React.Component {
                                 </MenuSection>
                             </MenuBarMenu>
                         </div>
+                        <div
+                            className={classNames(styles.menuBarItem, styles.hoverable, {
+                                [styles.active]: this.props.spritesMenuOpen
+                            })}
+                            onMouseUp={this.props.onClickSprites}>
+                            <div className={classNames(styles.spritesMenu)}>
+                                <FormattedMessage
+                                    defaultMessage="Sprites"
+                                    description="Text for sprites dropdown menu"
+                                    id="gui.menuBar.sprites"
+                                />
+                            </div>
+                            <MenuBarMenu
+                                    className={classNames(styles.menuBarMenu)}
+                                    open={this.props.spritesMenuOpen}
+                                    place={this.props.isRtl ? 'left' : 'right'}
+                                    onRequestClose={this.props.onRequestCloseSprites}
+                                >
+                                <MenuSection>
+                                    <MenuItem
+                                        isRtl={this.props.isRtl}
+                                        onClick={this.handleClickNew}
+                                    >
+                                        {newProjectMessage}
+                                    </MenuItem>
+                                </MenuSection>
+                                {(this.props.canSave || this.props.canCreateCopy || this.props.canRemix) && (
+                                    <MenuSection>
+                                        {this.props.canSave && (
+                                            <MenuItem onClick={this.handleClickSave}>
+                                                {saveNowMessage}
+                                            </MenuItem>
+                                        )}
+                                        {this.props.canCreateCopy && (
+                                            <MenuItem onClick={this.handleClickSaveAsCopy}>
+                                                {createCopyMessage}
+                                            </MenuItem>
+                                        )}
+                                        {this.props.canRemix && (
+                                            <MenuItem onClick={this.handleClickRemix}>
+                                                {remixMessage}
+                                            </MenuItem>
+                                        )}
+                                    </MenuSection>
+                                )}
+                                <MenuSection>
+                                    <MenuItem
+                                        onClick={this.props.onStartSelectingFileUpload}
+                                    >
+                                        {this.props.intl.formatMessage(sharedMessages.loadFromComputerTitle)}
+                                    </MenuItem>
+                                    <SB3Downloader>{(className, downloadProjectCallback) => (
+                                        <MenuItem
+                                            className={className}
+                                            onClick={this.getSaveToComputerHandler(downloadProjectCallback)}
+                                        >
+                                            <FormattedMessage
+                                                defaultMessage="Save to your computer"
+                                                description="Menu bar item for downloading a project to your computer" // eslint-disable-line max-len
+                                                id="gui.menuBar.downloadToComputer"
+                                            />
+                                        </MenuItem>
+                                    )}</SB3Downloader>
+                                </MenuSection>
+                            </MenuBarMenu>
+                        </div>
                     </div>
                     <Divider className={classNames(styles.divider)} />
                     <div
@@ -793,6 +863,7 @@ MenuBar.propTypes = {
     ]),
     onClickAccount: PropTypes.func,
     onClickEdit: PropTypes.func,
+    onClickSprites: PropTypes.func,
     onClickFile: PropTypes.func,
     onClickLanguage: PropTypes.func,
     onClickLogin: PropTypes.func,
@@ -809,6 +880,7 @@ MenuBar.propTypes = {
     onRequestCloseAbout: PropTypes.func,
     onRequestCloseAccount: PropTypes.func,
     onRequestCloseEdit: PropTypes.func,
+    onRequestCloseSprites: PropTypes.func,
     onRequestCloseFile: PropTypes.func,
     onRequestCloseLanguage: PropTypes.func,
     onRequestCloseLogin: PropTypes.func,
@@ -839,6 +911,7 @@ const mapStateToProps = (state, ownProps) => {
         accountMenuOpen: accountMenuOpen(state),
         fileMenuOpen: fileMenuOpen(state),
         editMenuOpen: editMenuOpen(state),
+        spritesMenuOpen: spritesMenuOpen(state),
         isRtl: state.locales.isRtl,
         isUpdating: getIsUpdating(loadingState),
         isShowingProject: getIsShowingProject(loadingState),
@@ -862,7 +935,9 @@ const mapDispatchToProps = dispatch => ({
     onClickFile: () => dispatch(openFileMenu()),
     onRequestCloseFile: () => dispatch(closeFileMenu()),
     onClickEdit: () => dispatch(openEditMenu()),
+    onClickSprites: () => dispatch(openSpritesMenu()),
     onRequestCloseEdit: () => dispatch(closeEditMenu()),
+    onRequestCloseSprites: () => dispatch(closeSpritesMenu()),
     onClickLanguage: () => dispatch(openLanguageMenu()),
     onRequestCloseLanguage: () => dispatch(closeLanguageMenu()),
     onClickLogin: () => dispatch(openLoginMenu()),
