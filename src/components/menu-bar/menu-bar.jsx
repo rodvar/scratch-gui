@@ -165,6 +165,7 @@ class MenuBar extends React.Component {
         super(props);
         bindAll(this, [
             'handleClickNew',
+            'handleClickChoose',
             'handleClickRemix',
             'handleClickSave',
             'handleClickSaveAsCopy',
@@ -197,6 +198,12 @@ class MenuBar extends React.Component {
             this.props.onClickNew(this.props.canSave && this.props.canCreateNew);
         }
         this.props.onRequestCloseFile();
+    }
+    handleClickChoose () {
+        alert("TODO");
+    }
+    handleClickGoToSpriteEditor() {
+        alert("TODO");
     }
     handleClickRemix () {
         this.props.onClickRemix();
@@ -366,6 +373,13 @@ class MenuBar extends React.Component {
                 defaultMessage="New"
                 description="Menu bar item for creating a new project"
                 id="gui.menuBar.new"
+            />
+        );
+        const chooseSpriteMessage = (
+            <FormattedMessage
+                defaultMessage="Choose"
+                description="Menu bar item for choosing a provided sprite"
+                id="gui.menuBar.chooseSprite"
             />
         );
         const remixButton = (
@@ -554,48 +568,26 @@ class MenuBar extends React.Component {
                                 <MenuSection>
                                     <MenuItem
                                         isRtl={this.props.isRtl}
-                                        onClick={this.handleClickNew}
+                                        onClick={this.handleClickChoose}
                                     >
-                                        {newProjectMessage}
+                                        {chooseSpriteMessage}
                                     </MenuItem>
                                 </MenuSection>
-                                {(this.props.canSave || this.props.canCreateCopy || this.props.canRemix) && (
-                                    <MenuSection>
-                                        {this.props.canSave && (
-                                            <MenuItem onClick={this.handleClickSave}>
-                                                {saveNowMessage}
-                                            </MenuItem>
-                                        )}
-                                        {this.props.canCreateCopy && (
-                                            <MenuItem onClick={this.handleClickSaveAsCopy}>
-                                                {createCopyMessage}
-                                            </MenuItem>
-                                        )}
-                                        {this.props.canRemix && (
-                                            <MenuItem onClick={this.handleClickRemix}>
-                                                {remixMessage}
-                                            </MenuItem>
-                                        )}
-                                    </MenuSection>
-                                )}
                                 <MenuSection>
                                     <MenuItem
                                         onClick={this.props.onStartSelectingFileUpload}
                                     >
                                         {this.props.intl.formatMessage(sharedMessages.loadFromComputerTitle)}
                                     </MenuItem>
-                                    <SB3Downloader>{(className, downloadProjectCallback) => (
-                                        <MenuItem
-                                            className={className}
-                                            onClick={this.getSaveToComputerHandler(downloadProjectCallback)}
-                                        >
-                                            <FormattedMessage
-                                                defaultMessage="Save to your computer"
-                                                description="Menu bar item for downloading a project to your computer" // eslint-disable-line max-len
-                                                id="gui.menuBar.downloadToComputer"
-                                            />
-                                        </MenuItem>
-                                    )}</SB3Downloader>
+                                    <MenuItem
+                                        onClick={this.handleClickGoToSpriteEditor}
+                                    >
+                                        <FormattedMessage
+                                            defaultMessage="Editor"
+                                            description="Menu bar item for editing a sprite" // eslint-disable-line max-len
+                                            id="gui.menuBar.spriteEditor"
+                                        />
+                                    </MenuItem>
                                 </MenuSection>
                             </MenuBarMenu>
                         </div>
