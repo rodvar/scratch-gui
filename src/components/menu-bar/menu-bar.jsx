@@ -41,8 +41,11 @@ import {
     saveProjectAsCopy
 } from '../../reducers/project-state';
 import {
-    openSpriteLibrary
+    openSpriteLibrary,
+    openBackdropLibrary
 } from '../../reducers/modals';
+import {activateTab, COSTUMES_TAB_INDEX, BLOCKS_TAB_INDEX} from '../../reducers/editor-tab';
+import {emptySprite} from '../../lib/empty-assets';
 import {
     openAboutMenu,
     closeAboutMenu,
@@ -209,16 +212,33 @@ class MenuBar extends React.Component {
         this.props.onRequestCloseFile();
     }
     handleClickChooseSprite () {
+        console.log(`choosing sprite..`);
         this.props.onClickChooseSprite();
     }
     handleClickChooseBackdrop () {
-        alert("TODO");
+        console.log(`choosing backdrop..`);
+        this.props.onClickChooseBackdrop();
     }
     handleClickGoToSpriteEditor() {
-        alert("TODO");
+        console.log(`go to sprite editor...`);
+        this.goToSpritesEditor();
     }
     handleClickGoToBackdropEditor() {
-        alert("TODO");
+        console.log(`go to backdrop editor...`);
+        this.goToSpritesEditor();
+    }
+    goToSpritesEditor() {
+        const formatMessage = this.props.intl.formatMessage;
+        const emptyItem = emptySprite(
+            formatMessage(sharedMessages.sprite, { index: 1 }),
+            formatMessage(sharedMessages.pop),
+            formatMessage(sharedMessages.costume, { index: 1 })
+        );
+        this.props.vm.addSprite(JSON.stringify(emptyItem)).then(() => {
+            setTimeout(() => {
+                this.props.onActivateTab(COSTUMES_TAB_INDEX);
+            });
+        });
     }
     handleClickRemix () {
         this.props.onClickRemix();
@@ -888,6 +908,7 @@ MenuBar.propTypes = {
     authorThumbnailUrl: PropTypes.string,
     authorUsername: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
     onClickChooseSprite: PropTypes.func,
+    onClickChooseBackdrop: PropTypes.func,
     autoUpdateProject: PropTypes.func,
     canChangeLanguage: PropTypes.bool,
     canCreateCopy: PropTypes.bool,
@@ -944,6 +965,7 @@ MenuBar.propTypes = {
     onRequestCloseLanguage: PropTypes.func,
     onRequestCloseLogin: PropTypes.func,
     onSeeCommunity: PropTypes.func,
+    onActivateTab: PropTypes.func,
     onShare: PropTypes.func,
     onStartSelectingFileUpload: PropTypes.func,
     onToggleLoginOpen: PropTypes.func,
@@ -989,6 +1011,7 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = dispatch => ({
     onClickChooseSprite: () => dispatch(openSpriteLibrary()),
+    onClickChooseBackdrop: () => dispatch(openSpriteLibrary()),
     autoUpdateProject: () => dispatch(autoUpdateProject()),
     onOpenTipLibrary: () => dispatch(openTipsLibrary()),
     onClickAccount: () => dispatch(openAccountMenu()),
@@ -1011,7 +1034,10 @@ const mapDispatchToProps = dispatch => ({
     onClickRemix: () => dispatch(remixProject()),
     onClickSave: () => dispatch(manualUpdateProject()),
     onClickSaveAsCopy: () => dispatch(saveProjectAsCopy()),
-    onSeeCommunity: () => dispatch(setPlayer(true))
+    onSeeCommunity: () => dispatch(setPlayer(true)),
+    onActivateTab: tabIndex => {
+        dispatch(activateTab(tabIndex));
+    }
 });
 
 export default compose(
