@@ -41,6 +41,9 @@ import {
     saveProjectAsCopy
 } from '../../reducers/project-state';
 import {
+    openSpriteLibrary
+} from '../../reducers/modals';
+import {
     openAboutMenu,
     closeAboutMenu,
     aboutMenuOpen,
@@ -206,7 +209,7 @@ class MenuBar extends React.Component {
         this.props.onRequestCloseFile();
     }
     handleClickChooseSprite () {
-        alert("TODO");
+        this.props.onClickChooseSprite();
     }
     handleClickChooseBackdrop () {
         alert("TODO");
@@ -884,6 +887,7 @@ MenuBar.propTypes = {
     authorId: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
     authorThumbnailUrl: PropTypes.string,
     authorUsername: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
+    onClickChooseSprite: PropTypes.func,
     autoUpdateProject: PropTypes.func,
     canChangeLanguage: PropTypes.bool,
     canCreateCopy: PropTypes.bool,
@@ -984,6 +988,7 @@ const mapStateToProps = (state, ownProps) => {
 };
 
 const mapDispatchToProps = dispatch => ({
+    onClickChooseSprite: () => dispatch(openSpriteLibrary()),
     autoUpdateProject: () => dispatch(autoUpdateProject()),
     onOpenTipLibrary: () => dispatch(openTipsLibrary()),
     onClickAccount: () => dispatch(openAccountMenu()),
