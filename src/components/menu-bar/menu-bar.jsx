@@ -1011,7 +1011,7 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = dispatch => ({
     onClickChooseSprite: () => dispatch(openSpriteLibrary()),
-    onClickChooseBackdrop: () => dispatch(openSpriteLibrary()),
+    onClickChooseBackdrop: () => dispatch(openBackdropLibrary()),
     autoUpdateProject: () => dispatch(autoUpdateProject()),
     onOpenTipLibrary: () => dispatch(openTipsLibrary()),
     onClickAccount: () => dispatch(openAccountMenu()),
