@@ -41,6 +41,12 @@ import {
     saveProjectAsCopy
 } from '../../reducers/project-state';
 import {
+    openSpriteLibrary,
+    openBackdropLibrary
+} from '../../reducers/modals';
+import {activateTab, COSTUMES_TAB_INDEX, BLOCKS_TAB_INDEX} from '../../reducers/editor-tab';
+import {emptySprite} from '../../lib/empty-assets';
+import {
     openAboutMenu,
     closeAboutMenu,
     aboutMenuOpen,
@@ -51,8 +57,14 @@ import {
     closeFileMenu,
     fileMenuOpen,
     openEditMenu,
+    openSpritesMenu,
+    openBackdropsMenu,
     closeEditMenu,
+    closeSpritesMenu,
+    closeBackdropsMenu,
     editMenuOpen,
+    spritesMenuOpen,
+    backdropsMenuOpen,
     openLanguageMenu,
     closeLanguageMenu,
     languageMenuOpen,
@@ -162,6 +174,10 @@ class MenuBar extends React.Component {
         super(props);
         bindAll(this, [
             'handleClickNew',
+            'handleClickChooseSprite',
+            'handleClickChooseBackdrop',
+            'handleClickGoToSpriteEditor',
+            'handleClickGoToBackdropEditor',
             'handleClickRemix',
             'handleClickSave',
             'handleClickSaveAsCopy',
@@ -194,6 +210,35 @@ class MenuBar extends React.Component {
             this.props.onClickNew(this.props.canSave && this.props.canCreateNew);
         }
         this.props.onRequestCloseFile();
+    }
+    handleClickChooseSprite () {
+        console.log(`choosing sprite..`);
+        this.props.onClickChooseSprite();
+    }
+    handleClickChooseBackdrop () {
+        console.log(`choosing backdrop..`);
+        this.props.onClickChooseBackdrop();
+    }
+    handleClickGoToSpriteEditor() {
+        console.log(`go to sprite editor...`);
+        this.goToSpritesEditor();
+    }
+    handleClickGoToBackdropEditor() {
+        console.log(`go to backdrop editor...`);
+        this.goToSpritesEditor();
+    }
+    goToSpritesEditor() {
+        const formatMessage = this.props.intl.formatMessage;
+        const emptyItem = emptySprite(
+            formatMessage(sharedMessages.sprite, { index: 1 }),
+            formatMessage(sharedMessages.pop),
+            formatMessage(sharedMessages.costume, { index: 1 })
+        );
+        this.props.vm.addSprite(JSON.stringify(emptyItem)).then(() => {
+            setTimeout(() => {
+                this.props.onActivateTab(COSTUMES_TAB_INDEX);
+            });
+        });
     }
     handleClickRemix () {
         this.props.onClickRemix();
@@ -232,6 +277,7 @@ class MenuBar extends React.Component {
         return () => {
             restoreFun();
             this.props.onRequestCloseEdit();
+            // this.props.onRequestCloseSprites();
         };
     }
     handleKeyPress (event) {
@@ -362,6 +408,20 @@ class MenuBar extends React.Component {
                 defaultMessage="New"
                 description="Menu bar item for creating a new project"
                 id="gui.menuBar.new"
+            />
+        );
+        const chooseSpriteMessage = (
+            <FormattedMessage
+                defaultMessage="Choose"
+                description="Menu bar item for choosing a provided sprite"
+                id="gui.menuBar.chooseSprite"
+            />
+        );
+        const chooseBackdropMessage = (
+            <FormattedMessage
+                defaultMessage="Choose"
+                description="Menu bar item for choosing a provided backdrop"
+                id="gui.menuBar.chooseBackdrop"
             />
         );
         const remixButton = (
@@ -526,6 +586,94 @@ class MenuBar extends React.Component {
                                             )}
                                         </MenuItem>
                                     )}</TurboMode>
+                                </MenuSection>
+                            </MenuBarMenu>
+                        </div>
+                        <div
+                            className={classNames(styles.menuBarItem, styles.hoverable, {
+                                [styles.active]: this.props.spritesMenuOpen
+                            })}
+                            onMouseUp={this.props.onClickSprites}>
+                            <div className={classNames(styles.spritesMenu)}>
+                                <FormattedMessage
+                                    defaultMessage="Sprites"
+                                    description="Text for sprites dropdown menu"
+                                    id="gui.menuBar.sprites"
+                                />
+                            </div>
+                            <MenuBarMenu
+                                    className={classNames(styles.menuBarMenu)}
+                                    open={this.props.spritesMenuOpen}
+                                    place={this.props.isRtl ? 'left' : 'right'}
+                                    onRequestClose={this.props.onRequestCloseSprites}
+                                >
+                                <MenuSection>
+                                    <MenuItem
+                                        isRtl={this.props.isRtl}
+                                        onClick={this.handleClickChooseSprite}
+                                    >
+                                        {chooseSpriteMessage}
+                                    </MenuItem>
+                                </MenuSection>
+                                <MenuSection>
+                                    <MenuItem
+                                        onClick={this.props.onStartSelectingFileUpload}
+                                    >
+                                        {this.props.intl.formatMessage(sharedMessages.loadFromComputerTitle)}
+                                    </MenuItem>
+                                    <MenuItem
+                                        onClick={this.handleClickGoToSpriteEditor}
+                                    >
+                                        <FormattedMessage
+                                            defaultMessage="Editor"
+                                            description="Menu bar item for editing a sprite" // eslint-disable-line max-len
+                                            id="gui.menuBar.spriteEditor"
+                                        />
+                                    </MenuItem>
+                                </MenuSection>
+                            </MenuBarMenu>
+                        </div>
+                        <div
+                            className={classNames(styles.menuBarItem, styles.hoverable, {
+                                [styles.active]: this.props.backdropsMenuOpen
+                            })}
+                            onMouseUp={this.props.onClickBackdrops}>
+                            <div className={classNames(styles.backdropsMenu)}>
+                                <FormattedMessage
+                                    defaultMessage="Backdrops"
+                                    description="Text for backdrops dropdown menu"
+                                    id="gui.menuBar.backdrops"
+                                />
+                            </div>
+                            <MenuBarMenu
+                                    className={classNames(styles.menuBarMenu)}
+                                    open={this.props.backdropsMenuOpen}
+                                    place={this.props.isRtl ? 'left' : 'right'}
+                                    onRequestClose={this.props.onRequestCloseBackdrops}
+                                >
+                                <MenuSection>
+                                    <MenuItem
+                                        isRtl={this.props.isRtl}
+                                        onClick={this.handleClickChooseBackdrop}
+                                    >
+                                        {chooseBackdropMessage}
+                                    </MenuItem>
+                                </MenuSection>
+                                <MenuSection>
+                                    <MenuItem
+                                        onClick={this.props.onStartSelectingFileUpload}
+                                    >
+                                        {this.props.intl.formatMessage(sharedMessages.loadFromComputerTitle)}
+                                    </MenuItem>
+                                    <MenuItem
+                                        onClick={this.handleClickGoToBackdropEditor}
+                                    >
+                                        <FormattedMessage
+                                            defaultMessage="Editor"
+                                            description="Menu bar item for editing a backdrop" // eslint-disable-line max-len
+                                            id="gui.menuBar.backdropEditor"
+                                        />
+                                    </MenuItem>
                                 </MenuSection>
                             </MenuBarMenu>
                         </div>
@@ -759,6 +907,8 @@ MenuBar.propTypes = {
     authorId: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
     authorThumbnailUrl: PropTypes.string,
     authorUsername: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
+    onClickChooseSprite: PropTypes.func,
+    onClickChooseBackdrop: PropTypes.func,
     autoUpdateProject: PropTypes.func,
     canChangeLanguage: PropTypes.bool,
     canCreateCopy: PropTypes.bool,
@@ -793,6 +943,7 @@ MenuBar.propTypes = {
     ]),
     onClickAccount: PropTypes.func,
     onClickEdit: PropTypes.func,
+    onClickSprites: PropTypes.func,
     onClickFile: PropTypes.func,
     onClickLanguage: PropTypes.func,
     onClickLogin: PropTypes.func,
@@ -809,10 +960,12 @@ MenuBar.propTypes = {
     onRequestCloseAbout: PropTypes.func,
     onRequestCloseAccount: PropTypes.func,
     onRequestCloseEdit: PropTypes.func,
+    onRequestCloseSprites: PropTypes.func,
     onRequestCloseFile: PropTypes.func,
     onRequestCloseLanguage: PropTypes.func,
     onRequestCloseLogin: PropTypes.func,
     onSeeCommunity: PropTypes.func,
+    onActivateTab: PropTypes.func,
     onShare: PropTypes.func,
     onStartSelectingFileUpload: PropTypes.func,
     onToggleLoginOpen: PropTypes.func,
@@ -839,6 +992,8 @@ const mapStateToProps = (state, ownProps) => {
         accountMenuOpen: accountMenuOpen(state),
         fileMenuOpen: fileMenuOpen(state),
         editMenuOpen: editMenuOpen(state),
+        spritesMenuOpen: spritesMenuOpen(state),
+        backdropsMenuOpen: backdropsMenuOpen(state),
         isRtl: state.locales.isRtl,
         isUpdating: getIsUpdating(loadingState),
         isShowingProject: getIsShowingProject(loadingState),
@@ -855,6 +1010,8 @@ const mapStateToProps = (state, ownProps) => {
 };
 
 const mapDispatchToProps = dispatch => ({
+    onClickChooseSprite: () => dispatch(openSpriteLibrary()),
+    onClickChooseBackdrop: () => dispatch(openBackdropLibrary()),
     autoUpdateProject: () => dispatch(autoUpdateProject()),
     onOpenTipLibrary: () => dispatch(openTipsLibrary()),
     onClickAccount: () => dispatch(openAccountMenu()),
@@ -862,7 +1019,11 @@ const mapDispatchToProps = dispatch => ({
     onClickFile: () => dispatch(openFileMenu()),
     onRequestCloseFile: () => dispatch(closeFileMenu()),
     onClickEdit: () => dispatch(openEditMenu()),
+    onClickSprites: () => dispatch(openSpritesMenu()),
+    onClickBackdrops: () => dispatch(openBackdropsMenu()),
     onRequestCloseEdit: () => dispatch(closeEditMenu()),
+    onRequestCloseSprites: () => dispatch(closeSpritesMenu()),
+    onRequestCloseBackdrops: () => dispatch(closeBackdropsMenu()),
     onClickLanguage: () => dispatch(openLanguageMenu()),
     onRequestCloseLanguage: () => dispatch(closeLanguageMenu()),
     onClickLogin: () => dispatch(openLoginMenu()),
@@ -873,7 +1034,10 @@ const mapDispatchToProps = dispatch => ({
     onClickRemix: () => dispatch(remixProject()),
     onClickSave: () => dispatch(manualUpdateProject()),
     onClickSaveAsCopy: () => dispatch(saveProjectAsCopy()),
-    onSeeCommunity: () => dispatch(setPlayer(true))
+    onSeeCommunity: () => dispatch(setPlayer(true)),
+    onActivateTab: tabIndex => {
+        dispatch(activateTab(tabIndex));
+    }
 });
 
 export default compose(
