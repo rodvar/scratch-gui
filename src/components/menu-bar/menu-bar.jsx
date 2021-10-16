@@ -223,9 +223,29 @@ class MenuBar extends React.Component {
         console.log(`go to sprite editor...`);
         this.goToSpritesEditor();
     }
+    handleFileUpload() {
+        console.log(`handle file upload?`);
+    }
     handleClickGoToBackdropEditor() {
         console.log(`go to backdrop editor...`);
         this.goToSpritesEditor();
+    }
+    handleCostumeUploaded() {
+        const storage = this.props.vm.runtime.storage;
+        const targetId = this.props.vm.editingTarget.id;
+        this.props.onShowImporting();
+        handleFileUpload(e.target, (buffer, fileType, fileName, fileIndex, fileCount) => {
+            costumeUpload(buffer, fileType, storage, vmCostumes => {
+                vmCostumes.forEach((costume, i) => {
+                    costume.name = `${fileName}${i ? i + 1 : ''}`;
+                });
+                this.handleNewCostume(vmCostumes, false, targetId).then(() => {
+                    if (fileIndex === fileCount - 1) {
+                        this.props.onCloseImporting();
+                    }
+                });
+            }, this.props.onCloseImporting);
+        }, this.props.onCloseImporting);
     }
     goToSpritesEditor() {
         const formatMessage = this.props.intl.formatMessage;
@@ -616,11 +636,11 @@ class MenuBar extends React.Component {
                                     </MenuItem>
                                 </MenuSection>
                                 <MenuSection>
-                                    <MenuItem
+                                    {/* <MenuItem
                                         onClick={this.props.onStartSelectingFileUpload}
                                     >
                                         {this.props.intl.formatMessage(sharedMessages.loadFromComputerTitle)}
-                                    </MenuItem>
+                                    </MenuItem> */}
                                     <MenuItem
                                         onClick={this.handleClickGoToSpriteEditor}
                                     >
@@ -660,11 +680,11 @@ class MenuBar extends React.Component {
                                     </MenuItem>
                                 </MenuSection>
                                 <MenuSection>
-                                    <MenuItem
-                                        onClick={this.props.onStartSelectingFileUpload}
+                                    {/* <MenuItem
+                                        onClick={this.handleFileUpload}
                                     >
                                         {this.props.intl.formatMessage(sharedMessages.loadFromComputerTitle)}
-                                    </MenuItem>
+                                    </MenuItem> */}
                                     <MenuItem
                                         onClick={this.handleClickGoToBackdropEditor}
                                     >
