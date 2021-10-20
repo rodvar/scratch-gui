@@ -307,6 +307,18 @@ class MenuBar extends React.Component {
             event.preventDefault();
         }
     }
+    handleCollapseToolbox() {
+        const elemennts = [];
+        elemennts.push(document.getElementsByClassName("blocklyFlyout")[0]);
+        elemennts.push(document.getElementsByClassName("blocklyToolboxDiv")[0]);
+        elemennts.forEach((elem) => {
+            if (elem.style.display === "none") {
+                elem.style.display = "block";
+            } else {
+                elem.style.display = "none";
+            }
+        });
+    }
     getSaveToComputerHandler (downloadProjectCallback) {
         return () => {
             this.props.onRequestCloseFile();
@@ -589,6 +601,15 @@ class MenuBar extends React.Component {
                                     </MenuItem>
                                 )}</DeletionRestorer>
                                 <MenuSection>
+                                    <MenuItem
+                                        onClick={(e) => {this.handleCollapseToolbox();}}
+                                    >
+                                       <FormattedMessage
+                                            defaultMessage="Collapse/Expand Toolbox"
+                                            description="Menu bar item for collapsing/expanding toolbox"
+                                            id="gui.menuBar.collapseToolbox"
+                                        />
+                                    </MenuItem>
                                     <TurboMode>{(toggleTurboMode, {turboMode}) => (
                                         <MenuItem onClick={toggleTurboMode}>
                                             {turboMode ? (
